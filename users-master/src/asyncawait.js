@@ -11,7 +11,7 @@ const createUser = (user) => {
 		resolve(user)
 	})
 }
-// Define a function to get a user by id and return a promise
+
 const getAUserByID = (id) => {
 	return new Promise((resolve, reject) => {
 		if (users[id]) {
