@@ -1,0 +1,61 @@
+// Import the axios library
+const fs = require('fs')
+
+const getMovies = (done) => {
+	// get all movies
+	done(null, require('../data/movies.json').movies)
+}
+
+const getMoviesById = (movieId, done) => {
+	// get movie by id
+
+	const result = require('../data/movies.json')
+		.movies.filter((m) => m.id === movieId)
+		.pop()
+	done(null, JSON.stringify(result))
+}
+
+const saveMovie = async function (newMovie, done) {
+	// save the details of a movie read from the request body
+	if (!require('../data/movies.json').movies[newMovie.id]) done('Request movie already exists..!', null)
+
+	require('../data/movies.json').movies.push(newMovie)
+
+	await fs.promises.writeFile('./src/movies.json', JSON.stringify(require('../data/movies.json')), (err) => {
+		console.log(err)
+	})
+	done(null, JSON.stringify(require('../data/movies.json').movies))
+}
+
+const updateMovie = async function (movieId, updateData, done) {
+	// update movie details of a specific movie
+
+	if (!require('../data/movies.json').movies.find((m) => m.id === movieId)) done("Requested movie doesn't exist..!", null)
+
+	const updatedMovies = require('../data/movies.json').movies.map((movie) => (movie.id === movieId ? { ...movie, ...updateData } : movie))
+
+	await fs.promises.writeFile('./src/movies.json', JSON.stringify({ movies: updatedMovies }), (err) => {
+		console.log(err)
+	})
+	return done(null, JSON.stringify(updatedMovies))
+}
+
+const deleteMovieById = async function (movieId, done) {
+	// delete a specific movie
+
+	if (!require('../data/movies.json').movies[movieId]) done("Requested movie doesn't exist..!", null)
+
+	const updatedMovies = require('../data/movies.json').movies.filter((m) => m.id !== movieId)
+	await fs.promises.writeFile('./src/movies.json', JSON.stringify({ movies: updatedMovies }), (err) => {
+		console.log(err)
+	})
+	done(null, JSON.stringify(updatedMovies))
+}
+
+module.exports = {
+	getMovies,
+	getMoviesById,
+	saveMovie,
+	updateMovie,
+	deleteMovieById,
+}
