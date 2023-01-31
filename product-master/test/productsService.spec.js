@@ -18,7 +18,6 @@ describe('Testing productService methods', function () {
 	it('Testing get product by Id with valid productId', function (done) {
 		productsService.getProductsById(2, (err, result) => {
 			let product = JSON.parse(result)
-
 			expect(err).to.be.equal(null)
 			expect(product).to.be.an('Object')
 			expect(product.id).to.be.equal(2)

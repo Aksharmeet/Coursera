@@ -46,7 +46,9 @@ const deleteProduct = async (productId, done) => {
 	if (!productExist) return done("Requested product doesn't exist..!", null)
 
 	const updatedProductList = productsList.filter((product) => product.id !== productId)
-	await fs.promises.writeFile('./src/products.json', JSON.stringify({ products: updatedProductList }))
+	await fs.promises.writeFile('./src/products.json', JSON.stringify({ products: updatedProductList }), (err) => {
+		console.log(err)
+	})
 	done(null, JSON.stringify(updatedProductList))
 }
 
