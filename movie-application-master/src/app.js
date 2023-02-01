@@ -4,11 +4,11 @@ const moviesService = require('./moviesService')
 const getRequestData = require('./utils')
 
 // Define the port at which the application will run
-const PORT = 5000
+const PORT = process.env.PORT || 6000
 
 // Define the server
 const server = http.createServer(async (req, res) => {
-	if (req.url === 'api/movies' && req.method === 'GET') {
+	if (req.url === '/api/movies' && req.method === 'GET') {
 		// Get all movies
 		moviesService.getMovies((err, data) => {
 			if (err) {
@@ -17,7 +17,7 @@ const server = http.createServer(async (req, res) => {
 				res.end(err)
 			} else {
 				res.writeHead(200, { 'content-type': 'application/json' })
-				console.log(data)
+
 				res.end(data)
 			}
 		})
@@ -33,7 +33,7 @@ const server = http.createServer(async (req, res) => {
 				res.end(data)
 			}
 		})
-	} else if (req.url === 'api/movies' && req.method === 'POST') {
+	} else if (req.url === '/api/movies' && req.method === 'POST') {
 		// Save movie details
 		const data = await getRequestData(req)
 		moviesService.saveMovie(JSON.parse(data), (err, data) => {
@@ -61,7 +61,7 @@ const server = http.createServer(async (req, res) => {
 	} else if (req.url.match(/\/api\/movies\/([0-9]+)/) && req.method === 'DELETE') {
 		// Delete a specific movie
 		const id = +req.url.split('/')[3]
-		moviesService.getMoviesById(id, (err, data) => {
+		moviesService.deleteMovieById(id, (err, data) => {
 			if (err) {
 				res.writeHead(400, { 'content-type': 'application/json' })
 				res.end(err)
@@ -78,8 +78,6 @@ server.listen(PORT, () => {
 	console.log(`server started on port: ${PORT}`)
 })
 
-server.on('error', (error) => {
-	if (error.code === 'EADRINUSE') {
-		console.log('Port already in use')
-	}
+server.on('error', (err) => {
+	console.log(err)
 })
