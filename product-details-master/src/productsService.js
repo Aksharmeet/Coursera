@@ -5,14 +5,14 @@ const getProducts = function (done) {
 }
 
 const getProductById = function (id, done) {
-	//call dao getProductById method and pass the parameter
+	productDao.getProductById(id, done)
 }
 const saveProductDetails = function (productDetails, done) {
-	//call dao saveProductDetails method and pass the parameter
+	productDao.saveProductDetails(productDetails, done)
 }
 
 const deleteProductById = (productId, done) => {
-	//call dao deleteProductById method and pass the parameter
+	productDao.deleteProductById(productId, done)
 }
 
 module.exports = {

@@ -10,15 +10,13 @@ router.get('/', (req, res) => {
 	try {
 		productsController.getProducts((err, results) => {
 			if (err) {
-				res.status(400).send('No products found...!')
+				return res.status(400).send('No products found...!')
 			} else {
-				const jsonData = JSON.stringify(results)
-				res.status(200).send(jsonData)
+				return res.status(200).send(JSON.stringify(results))
 			}
 		})
 	} catch (err) {
-		console.log(err)
-		res.status(500).send('Try after sometime')
+		return res.status(500).send('Try after sometime...!!')
 	}
 })
 
@@ -29,12 +27,19 @@ router.get('/', (req, res) => {
 // if error send 400 response with message 'no product matching the id exists'
 // if no error send 200 res wit results as res
 router.get('/:productId', (req, res) => {
+	const productId = req.params.productId
+	console.log(productId)
 	try {
 		//get the productid from the req.params
-
-		productsController.getProductById(productId, (err, results) => {})
+		productsController.getProductById(productId, (err, results) => {
+			if (err) {
+				return res.status(400).send(err)
+			} else {
+				return res.status(200).send(JSON.stringify(results))
+			}
+		})
 	} catch (err) {
-		//Handle the exception return response as 400 with status as some error msg
+		return res.status(500).send('Internal error try after sometime..!!')
 	}
 })
 
@@ -44,11 +49,18 @@ router.get('/:productId', (req, res) => {
 // if no error send 200 res with results as res
 router.post('/', (req, res) => {
 	try {
-		//get all the productdetails from the req.body
-		const productDetails = {}
-
-		productsController.saveProductDetails(productDetails, (err, results) => {})
-	} catch (err) {}
+		const productDetails = req.body
+		console.log(productDetails)
+		productsController.saveProductDetails(productDetails, (err, results) => {
+			if (err) {
+				return res.status(400).send(err)
+			} else {
+				return res.status(200).send(JSON.stringify(results))
+			}
+		})
+	} catch (err) {
+		res.status(500).send('Internal error, try again after sometime...!!')
+	}
 })
 
 //This method will delete product with specific productid from the product.json
@@ -57,9 +69,17 @@ router.post('/', (req, res) => {
 // if no error send 200 res with results as res
 router.delete('/:productId', (req, res) => {
 	try {
-		productsController.deleteProductById(productId, (err, results) => {})
+		const productId = req.params.productId
+		productsController.deleteProductById(productId, (err, results) => {
+			if (err) {
+				res.status(400).send(err)
+			} else {
+				res.status(200).send(JSON.stringify(results))
+			}
+		})
 	} catch (err) {
-		//Handle the exception return response as 400 with status as some error msg
+		console.log(err)
+		res.status(500).send('Internal error, try again after sometime...!!')
 	}
 })
 
