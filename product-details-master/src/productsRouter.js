@@ -2,17 +2,13 @@ const productsController = require('./productsController.js')
 const router = require('express').Router()
 //This method will get all the Product form the product.json
 
-// Logical Steps
-// call products controller dot getProducts
-// if error send 400 response with message 'no products found'
-// if no error send 200 res wit results as res
 router.get('/', (req, res) => {
 	try {
 		productsController.getProducts((err, results) => {
 			if (err) {
 				return res.status(400).send('No products found...!')
 			} else {
-				return res.status(200).send(JSON.stringify(results))
+				return res.status(200).json({ data: results, STATUS: 'OK' })
 			}
 		})
 	} catch (err) {
@@ -20,12 +16,6 @@ router.get('/', (req, res) => {
 	}
 })
 
-//This method will get the product with given productId form the product.json
-// call products controller dot getProductById
-// get the id from query params
-// use the id to the get the product
-// if error send 400 response with message 'no product matching the id exists'
-// if no error send 200 res wit results as res
 router.get('/:productId', (req, res) => {
 	const productId = req.params.productId
 	console.log(productId)
@@ -35,7 +25,7 @@ router.get('/:productId', (req, res) => {
 			if (err) {
 				return res.status(400).send(err)
 			} else {
-				return res.status(200).send(JSON.stringify(results))
+				return res.status(200).json({ data: results, STATUS: 'OK' })
 			}
 		})
 	} catch (err) {
@@ -43,19 +33,15 @@ router.get('/:productId', (req, res) => {
 	}
 })
 
-//This method will save/post a new product in the product.json
-// call products controller dot saveProductDetails
-// if error send 400 response with message 'product already exists'
-// if no error send 200 res with results as res
 router.post('/', (req, res) => {
 	try {
 		const productDetails = req.body
-		console.log(productDetails)
+
 		productsController.saveProductDetails(productDetails, (err, results) => {
 			if (err) {
 				return res.status(400).send(err)
 			} else {
-				return res.status(200).send(JSON.stringify(results))
+				return res.status(201).json({ data: results, STATUS: 'OK' })
 			}
 		})
 	} catch (err) {
@@ -63,10 +49,6 @@ router.post('/', (req, res) => {
 	}
 })
 
-//This method will delete product with specific productid from the product.json
-// call products controller dot saveProductDetails
-// if error send 400 response with message 'product already exists'
-// if no error send 200 res with results as res
 router.delete('/:productId', (req, res) => {
 	try {
 		const productId = req.params.productId
@@ -74,11 +56,10 @@ router.delete('/:productId', (req, res) => {
 			if (err) {
 				res.status(400).send(err)
 			} else {
-				res.status(200).send(JSON.stringify(results))
+				res.status(200).json({ data: results, STATUS: 'OK' })
 			}
 		})
 	} catch (err) {
-		console.log(err)
 		res.status(500).send('Internal error, try again after sometime...!!')
 	}
 })

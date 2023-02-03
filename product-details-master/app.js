@@ -2,7 +2,6 @@ const express = require('express')
 
 const config = require('./config')
 const app = express()
-const productsRouter = require('./src')
 
 const LoggerMiddleware = (req, res, next) => {
 	console.log(`${req.url} ${req.method} -- ${new Date()}`)
@@ -11,7 +10,8 @@ const LoggerMiddleware = (req, res, next) => {
 
 app.use(LoggerMiddleware)
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
+const productsRouter = require('./src')
 
 app.use('/api/v1/products', productsRouter)
 

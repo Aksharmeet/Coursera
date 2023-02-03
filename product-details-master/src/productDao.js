@@ -48,8 +48,8 @@ const saveProductDetails = async function (ProductDetails, done) {
 					return done('Error when writing file')
 				}
 			})
-			const updatedFile = fs.readFileSync(path.join('src', 'products.json'), 'utf-8')
-			return done(null, JSON.parse(updatedFile))
+
+			return done(null, ProductDetails)
 		}
 	}
 }
