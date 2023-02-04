@@ -1,0 +1,117 @@
+# API for CRUD operations on a resource
+openapi: 3.0.0
+info:
+  title: Movie Api
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+paths:
+  /movies:
+    post:
+      summary: Add new movie to database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        201:
+          description: Movie added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+    get:
+      summary: Get a list of movies
+      parameters:
+        - in: query
+          name: limit
+          description: The maximum number of resources to return
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: List of resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+  /movies/{id}:
+    get:
+      summary: Get a movie by ID
+      parameters:
+        - in: path
+          name: id
+          description: The ID of the movie
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: A single movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        404:
+          description: Movie not found
+    put:
+      summary: Update a movie by ID
+      parameters:
+        - in: path
+          name: id
+          description: The ID of the movie
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        200:
+          description: Movie updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        404:
+          description: Movie not found
+    delete:
+      summary: Delete a moive by ID
+      parameters:
+        - in: path
+          name: id
+          description: The ID of the movie
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Movie deleted successfully
+        404:
+          description: Movie not found
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        movieName:
+          type: string
+        director:
+          type: string
+        rating:
+          type: string
+        id:
+          type: integer
+      required:
+        - movieName
+        - director
+        - rating
+        - id
