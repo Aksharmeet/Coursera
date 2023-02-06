@@ -10,9 +10,13 @@ router.get('/login', (req, res) => {
 
 // Callback url to which github oauth code is sent
 router.get('/callback', (req, res) => {
+	!req.query.code ? res.status(401).send('Unauthorized') : null
 	try {
-		oauthCtrl.oauthProcessor(req.query.code, (err, token) => {
+		oauthCtrl.oauthProcessor(req.query.code, (err, { user, token }) => {
 			if (err) return res.status(400).send('Bad Request')
+
+			res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 3600000 })
+			res.cookie('user', JSON.stringify(user), { httpOnly: true, secure: true, maxAge: 3600000 })
 
 			return res.redirect(`http://localhost:3000?token=${token}`)
 		})

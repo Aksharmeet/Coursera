@@ -6,7 +6,11 @@ function oauthProcessor(code, done) {
 	oauthService.getGithubAccessToken(code, (err, token) => {
 		if (err) return done(err)
 
-		done(null, token)
+		oauthService.getAccessTokenOfUser(token, (err, user) => {
+			if (err) return done(err)
+
+			return done(null, { user, token })
+		})
 	})
 }
 

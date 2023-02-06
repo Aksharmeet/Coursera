@@ -15,7 +15,7 @@ function getGithubAccessToken(code, done) {
 	axios
 		.post('https://github.com/login/oauth/access_token', body, opts)
 		.then((response) => {
-			response.data.access_token
+			return response.data.access_token
 		})
 		.then((token) => {
 			done(null, token)
